@@ -1,0 +1,57 @@
+
+
+.todo-container {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color:#D81B60;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  h2 {
+    text-align: center;
+  }
+  
+  input {
+    width: calc(100% - 80px);
+    padding: 10px;
+    margin-right: 10px;
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #FFEB3B;
+    color: rgb(7, 1, 1);
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #FFEB3B;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    background-color: #eea0ca;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  li button {
+    background-color: #dc3545;
+  }
+  
+  li button:hover {
+    background-color: #c82333;
+  }
+  

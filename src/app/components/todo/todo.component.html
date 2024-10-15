@@ -1,0 +1,24 @@
+<form #todoForm="ngForm" (ngSubmit)="addTodo(todoForm)">
+    <div class="todo-container">
+      <h2>Todo List</h2>
+  
+      <input 
+        type="text" 
+        [(ngModel)]="newTodo" 
+        name="todo" 
+        #todoInput="ngModel" 
+        placeholder="Add todo" 
+        required 
+      />
+      
+      <button type="submit" [disabled]="!todoForm.form.valid">Add</button>
+    </div>
+  </form>
+  
+  <ul>
+    <li *ngFor="let todo of todos; let i = index">
+      <span>{{ i + 1 }}. {{ todo }}</span>
+      <button (click)="removeTodo(i)">X</button>
+    </li>
+  </ul>
+  
