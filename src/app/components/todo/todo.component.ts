@@ -1,34 +1,67 @@
 import { FormsModule } from '@angular/forms';
-import{CommonModule} from'@angular/common';
-import { Component } from '@angular/core';
+import { TodoCardComponent } from './../todo-card/todo-card.component';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { GetToDoListResponse } from '../../models/getToDoListResponse';
+import { ToDoRequest } from '../../models/toDoRequest';
 
 @Component({
   selector: 'app-todo',
-  imports:[CommonModule, FormsModule],
-  standalone:true,
+  imports: [FormsModule,CommonModule, TodoCardComponent],
+  standalone: true,
   templateUrl: './todo.component.html',
-  styleUrls: ['./todo.component.scss']
+  styleUrls: ['./todo.component.scss'],
 })
-export class TodoComponent {
-  newTodo: string = '';
-  todos: string[] = [];
+export class TodoComponent implements OnInit {
+  newTodo: ToDoRequest = { userId: 1, title: '', completed: false }; 
+  todos: GetToDoListResponse[] = [];
 
-  addTodo(form: any): void {
-    const todoTrimmed = this.newTodo.trim();
+  constructor(private httpClient: HttpClient) {}
+
+  ngOnInit() {
+    this.fetchTodos();
+  }
 
   
-    if (todoTrimmed && !this.todos.includes(todoTrimmed)) {
-      this.todos.push(todoTrimmed);
-      this.newTodo = '';
-      form.resetForm(); 
-    } else {
-      this.newTodo = ''; 
-      form.resetForm(); 
+  add(): void {
+    if (this.newTodo.title.trim().length > 0) {
+      this.httpClient.post<GetToDoListResponse>('https://jsonplaceholder.typicode.com/todos', this.newTodo)
+        .subscribe({
+          next: (todo) => {
+            this.todos.push(todo);
+            this.newTodo.title = ''; 
+          },
+          error: (err) => {
+            console.error('Hata:', err);
+          }
+        });
     }
   }
 
-  removeTodo(index: number): void {
-    this.todos.splice(index, 1);
+ 
+  remove(todo: GetToDoListResponse): void {
+    this.httpClient.delete<void>(`https://jsonplaceholder.typicode.com/todos/${todo.id}`)
+      .subscribe({
+        next: () => {
+          this.todos = this.todos.filter(i => i.id !== todo.id);
+        },
+        error: (err) => {
+          console.error('Hata:', err);
+        }
+      });
+  }
+
+
+  fetchTodos() {
+    this.httpClient.get<GetToDoListResponse[]>('https://jsonplaceholder.typicode.com/todos')
+      .subscribe({
+        next: (response) => {
+          this.todos = response;
+        },
+        error: (err) => {
+          console.log('HATA', err);
+        }
+      });
   }
 }
-

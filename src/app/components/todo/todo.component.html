@@ -1,24 +1,23 @@
-<form #todoForm="ngForm" (ngSubmit)="addTodo(todoForm)">
-    <div class="todo-container">
-      <h2>Todo List</h2>
-  
-      <input 
-        type="text" 
-        [(ngModel)]="newTodo" 
-        name="todo" 
-        #todoInput="ngModel" 
-        placeholder="Add todo" 
-        required 
+<form #todoForm="ngForm" (ngSubmit)="add()">
+  <div class="todo-container">
+    <h2>Todo List</h2>
+
+    <input 
+      type="text" 
+      [(ngModel)]="newTodo.title" 
+      name="todo" 
+      placeholder="Add todo" 
+    />
+    
+    <button type="submit" [disabled]="!todoForm.form.valid">Add</button>
+  </div>
+</form>
+
+<div class="row">
+  <div class="col-2" *ngFor="let todo of todos">
+      <app-todo-card
+          [toDoFromOtherPage]="todo.title"
+          (onRemoveClick)="remove(todo)"
       />
-      
-      <button type="submit" [disabled]="!todoForm.form.valid">Add</button>
-    </div>
-  </form>
-  
-  <ul>
-    <li *ngFor="let todo of todos; let i = index">
-      <span>{{ i + 1 }}. {{ todo }}</span>
-      <button (click)="removeTodo(i)">X</button>
-    </li>
-  </ul>
-  
+  </div>
+</div>
